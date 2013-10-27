@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns:rim="http://www.blackberry.com/ns/widgets" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" id="Camera">
+  <name>Camera HTML5</name>
+  <author>Joel Ortiz</author>
+  <description>This app demonstrates how to use camera API</description>
+  <content src="index.html"/>
+  <icon src="img/icoApp.png"/>
+  <access uri="*" subdomains="true"/>
+  <feature id="blackberry.invoke.card"/>
+  <feature id="blackberry.app">
+    <param name="orientation" value="portrait"/>
+  </feature>
+  <rim:permissions>
+	<rim:permit>access_shared</rim:permit>
+  </rim:permissions>
+</widget>

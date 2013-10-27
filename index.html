@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Camera</title>
+<link rel="stylesheet" href="css/BlackBerry-JQM-all-1.0.0.css">
+<script src="js/BlackBerry-JQM-all-1.0.0.js"></script>
+<script src="local:///chrome/webworks.js"></script>
+<script>
+
+var heightContent;
+var widthImgOriginal;
+var heightImgOriginal;
+var widthImgNew;
+var heightImgNew;
+var marginTopImg;
+var myPhoto;
+var spacer;
+
+function displayPhoto(){
+	
+	widthImgOriginal=myPhoto.width;
+	heightImgOriginal=myPhoto.height;
+		
+	heightImgNew = Math.round((heightImgOriginal*widthImgNew)/widthImgOriginal);
+	
+	myPhoto.width = widthImgNew;
+	myPhoto.height = heightImgNew;
+		
+	if(heightImgNew < widthImgNew){
+		marginTopImg = Math.round((heightImgNew/2)+spacer);
+	}else{
+		marginTopImg = Math.round((heightImgNew/4)+spacer);
+	}
+	
+	$("#photo").css("-webkit-transform","rotate(90deg)");
+	$("#photo").css("width", widthImgNew+"px");
+	$("#photo").css("height", heightImgNew+"px");
+	$("#photo").css("margin", "auto");
+	$("#photo").css("margin-top", marginTopImg+"px");
+	$("#photo").css("overflow","hidden");
+	$("#photo").append(myPhoto);
+	
+}
+
+function onSuccess(path) {
+	
+	$("#photo").find("img").remove();
+	delete 	myPhoto;
+	
+	myPhoto = new Image();
+	myPhoto.src = "file://"+path;
+	myPhoto.onload =  displayPhoto;
+}
+
+function onCancel(reason){
+	alert("Cancelled " + reason);
+}
+
+function onError(error) {
+  if (error) {
+	  alert("invoke error "+ error);
+	  } else {
+	  alert("invoke success");
+	}
+}
+
+function invokeCameraCard() {
+	var mode = blackberry.invoke.card.CAMERA_MODE_PHOTO;
+	blackberry.invoke.card.invokeCamera(mode, onSuccess, onCancel, onError);
+}
+
+function init(){
+	widthImgNew = 700;
+	spacer = 30;
+	heightContent = ($(window).height())-($("#myHeader").height())-($("#myFooter").height())-spacer;
+	
+	$("#myHeader").css("overflow","hidden");
+	$("#myFooter").css("overflow","hidden");
+	$("#myContent").css("overflow","hidden");
+	$("#myContent").css("height", heightContent+"px");
+	$("#btnCapturePhoto").click(invokeCameraCard);
+}
+
+</script>
+</head>
+
+<body onLoad="javascript:init();">
+<div data-role="page">
+  <div id="myHeader" data-role="header" data-theme="b" data-position="fixed">
+    <h1>Camera</h1>
+  </div>
+  <div id="myContent" data-role="content">
+    <div id="photo"></div>
+  </div>
+  <div id="myFooter" data-role="footer" data-position="fixed">
+    <div data-role="actionbar">
+      <div id="btnCapturePhoto" data-role="action"><img src="img/icoCamera.png" width="60" height="60"/>
+        <p>Take Picture</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
